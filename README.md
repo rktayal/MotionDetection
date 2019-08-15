@@ -1,12 +1,13 @@
 # MotionDetection
-The repo includes a plug and play basic motion detection module which can be used across various Vision based application using OpenCV-Python. Credits to Adrian Rosebrock for his comprehensive tutorial on the same.
+The repo includes a plug and play basic motion detection module which can be used across various Vision based application. Credits to Adrian Rosebrock for his comprehensive tutorial on the same.
 
 ### Requirements
+Below are the Python packages which will be required.
 ```
 1. imutils
 2. opencv-python
 ```
-You can instal above python packages using `pip install <package_name>` command.
+You can install above python packages using `pip install <package_name>` command.
 
 
 ### Run Demo app
@@ -23,19 +24,20 @@ while True:
     print(status)
 ```
 The above demo code does the following things in order.
-- Initialize a VideoCapture object to fetch frames
+- Initialize a VideoCapture object to fetch frames. `cv2.VideoCapture(vid_file)`
 - Initialize the motion detection class object.
   `class MotionDetection(visual=1, minarea=500, thresh=25, width=None, height=None)`
 
     Parameters:
 
-    1. visual: To toggle the visual dispaly of frames. (enabled by default)
-    2. minarea: Minimum area to take into consideration of contour for motion detection (500 by default)
-    3. thresh: Value used to threshold the frameDelta i.e. difference between refrence frame and current frame.
+    1. `visual`: To toggle the visual dispaly of frames. (enabled by default)
+    2. `minarea`: Minimum area to take into consideration of contour for motion detection (500 by default)
+    3. `thresh`: Value used to threshold the frameDelta i.e. difference between refrence frame and current frame.
     if the pixel difference is less than `thresh`, it will be discarded.
-    4. width: To resize the frame's width (will retain original frame's width, if not passed)
-    5. height: To resize the frame's height (will retain original frame's height, if not passed)
-- Set the reference frame
+    4. `width`: To resize the frame's width (will retain original frame's width, if not passed)
+    5. `height`: To resize the frame's height (will retain original frame's height, if not passed)<br />
+    Above we have called the `MotionDetection()` constructor with no arguments. Therefore, it will take the original frame width and height.
+- Set the reference frame by calling the `md_obj.set_reference_frame(frame)` method.
 - Fetch frames from `cap` object and compare them with reference frame using `md_obj.is_motion(frame)` to detect if there is any motion.
 
 Similarly you can also get the metrics of difference between the reference frame and the current frame using
