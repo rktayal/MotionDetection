@@ -12,6 +12,7 @@ You can instal above python packages using `pip install <package_name>` command.
 ### Run Demo app
 Sample code to use the Motion Detection module is shown below:
 ```
+import cv2
 cap = cv2.VideoCapture('video_file')
 md_obj = MotionDetection()
 ret, frame = cap.read()
@@ -25,7 +26,9 @@ The above demo code does the following things in order.
 - Initialize a VideoCapture object to fetch frames
 - Initialize the motion detection class object.
   `class MotionDetection(visual=1, minarea=500, thresh=25, width=None, height=None)`
-  Parameters:
+
+    Parameters:
+
     1. visual: To toggle the visual dispaly of frames. (enabled by default)
     2. minarea: Minimum area to take into consideration of contour for motion detection (500 by default)
     3. thresh: Value used to threshold the frameDelta i.e. difference between refrence frame and current frame.
@@ -41,6 +44,12 @@ get methods for contours, thresh and frame delta.
 frame_delta = md_obj.get_frame_delta()
 contours = md_obj.get_contours()
 ```
-
+### Background on Motion Detection
+It computes the difference between the reference frame and subsequent new frames from the video stream.<br /><br />
+Computing the difference between two frames is a simple subtraction, where we take the absolute value of their corresponding pixel intensity differences. <br /><br />
+`delta = |background_model – current_frame|` <br /><br />
+Next we will threshold the delta, based on the value of `thresh`. Only those pixels will be considered whose delta value
+will be higher than the `thresh` value. <br />
+Once this computation is done, we will extract the contours (using contour detection) to find outlines of such areas. If the contour area is larger than our supplied `minarea` , then we’ll draw the bounding box surrounding the motion region and the status will be motion detected.<br />
 ### References
 - https://www.pyimagesearch.com/2015/05/25/basic-motion-detection-and-tracking-with-python-and-opencv/
