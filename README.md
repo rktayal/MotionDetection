@@ -14,9 +14,11 @@ You can install above python packages using `pip install <package_name>` command
 Sample code to use the Motion Detection module is shown below:
 ```
 import cv2
+from motion_detection_engine import MotionDetection
+
 cap = cv2.VideoCapture('test_data/video_file.mp4')
-md_obj = MotionDetection()
-ret, frame = cap.read()
+md_obj = MotionDetection(width=640, height=480)
+ret, frame = cap.read()        
 md_obj.set_reference_frame(frame)
 while True:
     ret, frame = cap.read()
