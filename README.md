@@ -38,7 +38,7 @@ The above demo code does the following things in order.
     if the pixel difference is less than `thresh`, it will be discarded.
     4. `width`: To resize the frame's width (will retain original frame's width, if not passed)
     5. `height`: To resize the frame's height (will retain original frame's height, if not passed)<br />
-    Above we have called the `MotionDetection()` constructor with no arguments. Therefore, it will take the original frame width and height.
+    Above we have invoked the  `MotionDetection` constructor with widht and height arguments. Therefore, it will take the original frame and resize it to `640x480` as a preprocessing step.
 - Set the reference frame by calling the `md_obj.set_reference_frame(frame)` method.
 - Fetch frames from `cap` object and compare them with reference frame using `md_obj.is_motion(frame)` to detect if there is any motion. Returns `True` in case motion is detected, else `False`
 
