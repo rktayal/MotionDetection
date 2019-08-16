@@ -40,7 +40,7 @@ The above demo code does the following things in order.
     5. `height`: To resize the frame's height (will retain original frame's height, if not passed)<br />
     Above we have called the `MotionDetection()` constructor with no arguments. Therefore, it will take the original frame width and height.
 - Set the reference frame by calling the `md_obj.set_reference_frame(frame)` method.
-- Fetch frames from `cap` object and compare them with reference frame using `md_obj.is_motion(frame)` to detect if there is any motion. `True` in case motion is detected, else `False`
+- Fetch frames from `cap` object and compare them with reference frame using `md_obj.is_motion(frame)` to detect if there is any motion. Returns `True` in case motion is detected, else `False`
 
 Similarly you can also get the metrics of difference between the reference frame and the current frame using
 get methods for contours, thresh and frame delta.
