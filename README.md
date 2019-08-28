@@ -14,9 +14,11 @@ You can install above python packages using `pip install <package_name>` command
 Sample code to use the Motion Detection module is shown below:
 ```
 import cv2
+from motion_detection_engine import MotionDetection
+
 cap = cv2.VideoCapture('test_data/video_file.mp4')
-md_obj = MotionDetection()
-ret, frame = cap.read()
+md_obj = MotionDetection(width=640, height=480)
+ret, frame = cap.read()        
 md_obj.set_reference_frame(frame)
 while True:
     ret, frame = cap.read()
@@ -36,9 +38,9 @@ The above demo code does the following things in order.
     if the pixel difference is less than `thresh`, it will be discarded.
     4. `width`: To resize the frame's width (will retain original frame's width, if not passed)
     5. `height`: To resize the frame's height (will retain original frame's height, if not passed)<br />
-    Above we have called the `MotionDetection()` constructor with no arguments. Therefore, it will take the original frame width and height.
+    Above we have invoked the  `MotionDetection` constructor with widht and height arguments. Therefore, it will take the original frame and resize it to `640x480` as a preprocessing step.
 - Set the reference frame by calling the `md_obj.set_reference_frame(frame)` method.
-- Fetch frames from `cap` object and compare them with reference frame using `md_obj.is_motion(frame)` to detect if there is any motion.
+- Fetch frames from `cap` object and compare them with reference frame using `md_obj.is_motion(frame)` to detect if there is any motion. Returns `True` in case motion is detected, else `False`
 
 Similarly you can also get the metrics of difference between the reference frame and the current frame using
 get methods for contours, thresh and frame delta.
