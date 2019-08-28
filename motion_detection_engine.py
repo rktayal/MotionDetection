@@ -6,17 +6,21 @@ import os
 import sys
 import cv2
 import time
+import types
 import imutils
 import argparse
 from datetime import datetime
 from imutils.video import VideoStream
 
 class MotionDetection(object):
-    """ The class is provides methods to detect motion across frames
+    """ The class is provides methods to detect motion across frames. It implements
+        strategy design pattern that enables algorithm's behavior to be selected 
+        at runtime. MotionDetection is a single class and replace 
+        the method of this class at runtime, with a different function
+        based on a given context.
     """
     def __init__(self, minarea=500, thresh=25,
-                visual=1, width=None, height=None):
-        print ('no fucks given')
+                visual=1, width=None, height=None, algorithm=None):
         self.min_area = minarea
         self.delta_thresh = thresh
         self.visual = visual
@@ -26,8 +30,19 @@ class MotionDetection(object):
         self.thresh = None
         self.frame_delta = None
         self.reference_frame = None
+        self.avg = None
         self.frame = None
         self.status = "No motion"
+        if algorithm is not None:
+            # take a function, bind it to this instance, and replace
+            # the default bound method 'execute' with this new bound
+            # method.
+            self.name = "{}_{}".format(self.__class__.__name__, algorithm.__name__)
+            print ('self.name, self.execute', self.name, self.execute)
+            self.execute = types.MethodType(algorithm, self)
+        else:
+            self.name = "{}_default".format(self.__class__.__name__)
+
 
     def get_contours(self):
         return self.cnts
@@ -48,8 +63,10 @@ class MotionDetection(object):
     def set_reference_frame(self, frame):
         pframe = self._pre_process_frame(frame)
         self.reference_frame = pframe
+        # if the average frame is None, initialize it as well
+        self.avg = pframe.copy().astype("float")
 
-    def _compute_difference(self, frame):
+    def execute(self, frame):
         ''' The method computes pixel wise difference between the
         reference frame and current frame
         '''
@@ -74,7 +91,7 @@ class MotionDetection(object):
         if self.width:
             self.frame = cv2.resize(self.frame, (self.width, self.height))
         self.status = "No motion"
-        self._compute_difference(frame)
+        self.execute(frame)
         motion = 0
         for c in self.cnts:
             # if the contours is too small, no motion
@@ -101,3 +118,19 @@ class MotionDetection(object):
         if key == ord("q"):
             cv2.destroyAllWindows()
             sys.exit(-1)
+
+def weighted_difference(self, frame):
+    # accumulate the weighted average between the current frame and
+    # previous frames, then compute the difference between current
+    # frame and running average
+    pframe = self._pre_process_frame(frame)
+    cv2.accumulateWeighted(pframe, self.avg, 0.5)
+    self.frame_delta = cv2.absdiff(pframe, cv2.convertScaleAbs(self.avg))
+    self.thresh = cv2.threshold(self.frame_delta, self.delta_thresh,
+                                255, cv2.THRESH_BINARY)[1]
+    # dilate the thresholded image to fill in holes, then find
+    # contours on thresholded images
+    self.thresh = cv2.dilate(self.thresh, None, iterations=2)
+    self.cnts = cv2.findContours(self.thresh.copy(), cv2.RETR_EXTERNAL,
+                                 cv2.CHAIN_APPROX_SIMPLE)
+    self.cnts = imutils.grab_contours(self.cnts)

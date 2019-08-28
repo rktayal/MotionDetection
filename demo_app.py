@@ -4,7 +4,7 @@ import cv2
 import argparse
 from imutils.video import VideoStream
 
-from motion_detection_engine import MotionDetection
+from motion_detection_engine import MotionDetection, weighted_difference
 
 if  __name__ == "__main__":
     # construct the argument parser and parse the arguments
@@ -21,7 +21,8 @@ if  __name__ == "__main__":
     else:
         vs = cv2.VideoCapture(args["video"])
 
-    md_obj = MotionDetection(width=640, height=480)
+    md_obj = MotionDetection(width=640, height=480, algorithm=weighted_difference)
+    #md_obj = MotionDetection(width=640, height=480)
     frame = vs.read()
     ref_frame = frame if args.get("video", None) is None else frame[1]
     md_obj.set_reference_frame(ref_frame)
