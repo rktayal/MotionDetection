@@ -1,6 +1,11 @@
 # MotionDetection
 The repo includes a plug and play basic motion detection module which can be used across various Vision based application. Credits to Adrian Rosebrock for his comprehensive tutorial on the same.
 
+Here's the Motion Detection Module in action. <br /><br />
+
+
+[![Watch the video](https://youtu.be/CfrOurG3VLY/hqdefault.jpg)](https://youtu.be/CfrOurG3VLY)
+
 ### Requirements
 Below are the Python packages which will be required.
 ```
